@@ -1,24 +1,118 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]> 	<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> 		<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> 		<html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My AngularJS App</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <link rel="stylesheet" href="app.css">
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+	<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="app.css">
+	<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+	<title>Spring REST + AngularJS Example</title>
 </head>
-<body>
-  
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="app.js"></script>
+
+<body ng-app="myApp" class="ng-cloak">
+      <div class="generic-container" ng-controller="UserController as vm">
+          <div class="panel panel-default">
+              <div class="panel-heading"><span class="lead">User Registration Form </span></div>
+              <div class="formcontainer">
+                  <form ng-submit="vm.submit()" name="myForm" class="form-horizontal">
+                      <input type="hidden" ng-model="vm.user.id" />
+                      <div class="row">
+                          <div class="form-group col-md-12">
+                              <label class="col-md-2 control-lable" for="uname">Name</label>
+                              <div class="col-md-7">
+                                  <input type="text" ng-model="vm.user.username" id="uname" class="username form-control input-sm" placeholder="Enter your name" required ng-minlength="3"/>
+                                  <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.uname.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.uname.$error.minlength">Minimum length required is 3</span>
+                                      <span ng-show="myForm.uname.$invalid">This field is invalid </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                         
+                       
+                      <div class="row">
+                          <div class="form-group col-md-12">
+                              <label class="col-md-2 control-lable" for="address">Address</label>
+                              <div class="col-md-7">
+                                  <input type="text" ng-model="vm.user.address" id="address" class="form-control input-sm" placeholder="Enter your Address. [This field is validation free]"/>
+                              </div>
+                          </div>
+                      </div>
+ 
+                      <div class="row">
+                          <div class="form-group col-md-12">
+                              <label class="col-md-2 control-lable" for="email">Email</label>
+                              <div class="col-md-7">
+                                  <input type="email" ng-model="vm.user.email" id="email" class="email form-control input-sm" placeholder="Enter your Email" required/>
+                                  <div class="has-error" ng-show="myForm.$dirty">
+                                      <span ng-show="myForm.email.$error.required">This is a required field</span>
+                                      <span ng-show="myForm.email.$invalid">This field is invalid </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+ 
+                      <div class="row">
+                          <div class="form-actions floatRight">
+                              <input type="submit"  value="{{!vm.user.id ? 'Add' : 'Update'}}" class="btn btn-primary btn-sm" ng-disabled="myForm.$invalid">
+                              <button type="button" ng-click="vm.reset()" class="btn btn-warning btn-sm" ng-disabled="myForm.$pristine">Reset Form</button>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <div class="panel panel-default">
+                <!-- Default panel contents -->
+              <div class="panel-heading"><span class="lead">List of Users </span></div>
+              <div class="tablecontainer">
+                  <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th>ID.</th>
+                              <th>Name</th>
+                              <th>Address</th>
+                              <th>Email</th>
+                              <th width="20%"></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="u in vm.users">
+                              <td><span ng-bind="u.id"></span></td>
+                              <td><span ng-bind="u.username"></span></td>
+                              <td><span ng-bind="u.address"></span></td>
+                              <td><span ng-bind="u.email"></span></td>
+                              <td>
+                              <button type="button" ng-click="vm.edit(u.id)" class="btn btn-success custom-width">Edit</button>  <button type="button" ng-click="vm.remove(u.id)" class="btn btn-danger custom-width">Remove</button>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+       
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+	<!--<script src="bower_components/angular-ui-router-v0.4.2.js"></script>-->
+
+	<script src="app.js"></script>
+    <script src="js/service/user_service.js"></script>
+    <script src="js/controller/user_controller.js"></script>
 </body>
+
 </html>
