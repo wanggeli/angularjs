@@ -9,7 +9,7 @@
 
 	function UserService($http, $q) {
 
-		var REST_SERVICE_URI = 'http://localhost:8080/spring-mvc-angularjs/user/';
+		var REST_SERVICE_URI = 'http://localhost:8080/spring-rest/user/';
 
 		var factory = {
 			fetchAllUsers: fetchAllUsers,
